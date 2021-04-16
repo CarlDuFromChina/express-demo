@@ -1,15 +1,15 @@
+const { json } = require('express');
 var express = require('express');
-var { Client } = require('../db/dbConfig');
+var getClient = require('../db/dbClientFactory');
 
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  Client.connect().then(() => {
-    Client.query('SELECT NOW()').then((resp) => {
-      res.send(resp.rows[0]);
-    });
-  });
+router.get('/', async function (req, res, next) {
+  var client = getClient();
+  await client.connect();
+  const resp = await client.query('select * from user_info');
+  res.send(JSON.stringify(resp.rows));
 });
 
 module.exports = router;
