@@ -1,14 +1,14 @@
 import { Client } from 'pg';
 import { isNil } from "../common/isNull";
-import defaultConfig from './dbConfig';
+import { defaultConfig, IConfig } from './dbConfig';
 
-interface IClient {
-  connect: () => Promise<any>,
-  query: (sql: string, values: Array<any>) => Promise<any>,
-  end(): void
+export interface IClient {
+  connect: (callback?: (err: Error) => void) => Promise<void>,
+  query: (sql: string, values?: Array<any>, callback?: (err: Error, result: IResult) => void) => Promise<any>,
+  end(callback?: (err?: Error) => void): Promise<void>,
 }
 
-interface IResult {
+export interface IResult {
   command: string,
   rowCount: number,
   rows: Array<any>,
@@ -17,10 +17,10 @@ interface IResult {
   rowAsArray: boolean
 }
 
-class PersistBroker {
+export class PersistBroker {
   client: IClient;
 
-  constructor(config?: Object) {
+  constructor(config?: IConfig) {
     if (isNil(config)) {
       this.client = new Client(defaultConfig);
     } else {
