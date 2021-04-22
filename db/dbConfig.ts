@@ -1,10 +1,8 @@
-var config = {
+export default {
   host: '127.0.0.1',
   user: 'postgres',
-  database: 'demo',
+  database: 'postgres',
   password: '123123',
-  port: 5433,
+  port: 5432,
   connectionTimeoutMillis: 5000,
 };
-
-module.exports = config
